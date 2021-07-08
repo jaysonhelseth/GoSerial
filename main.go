@@ -11,13 +11,12 @@ func main() {
 	mockDevice := device.MockDevice()
 	runDevice(mockDevice)
 
-	rDevice := device.RealDevice("tty", 115200)
+	rDevice := device.RealDevice("/dev/tty.usbserial-0001", 9600)
 	runDevice(rDevice)
 }
 
 func runDevice(device *device.MySerial) {
 	device.OpenPort()
-	buf := make([]byte, 128)
-	count, _ := device.Read(buf)
-	fmt.Printf("%s\n", string(buf[:count]))
+	bytes, _ := device.Read()
+	fmt.Printf("%s\n", string(bytes))
 }

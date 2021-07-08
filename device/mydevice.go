@@ -1,6 +1,7 @@
 package device
 
 import (
+	"bufio"
 	"github.com/tarm/serial"
 	"log"
 )
@@ -48,10 +49,13 @@ func (ms *MySerial) OpenPort() {
 	}
 }
 
-func (ms *MySerial) Read(b []byte) (count int, err error) {
+func (ms *MySerial) Read() (bytes []byte, err error) {
 	if ms.isMock {
-		return GetData(b)
+		return GetData()
 	}
 
-	return ms.port.Read(b)
+	reader := bufio.NewReader(ms.port)
+	reply, err := reader.ReadBytes('\x0a')
+
+	return reply, nil
 }
